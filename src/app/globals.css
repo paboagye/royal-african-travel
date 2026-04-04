@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
+  /* Brand Colors */
+  --color-brand-red: oklch(0.48 0.18 18);         /* #AF1C2C Deep Red/Maroon */
+  --color-brand-red-dark: oklch(0.40 0.16 18);     /* #8B1622 Dark Maroon */
+  --color-brand-navy: oklch(0.30 0.06 260);        /* #1A365D Navy Blue */
+  --color-brand-gold: oklch(0.74 0.12 80);         /* #D4A843 Warm Gold */
+  --color-brand-green: oklch(0.46 0.10 160);       /* #2D6A4F Forest Green */
+
+  /* shadcn theme tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Typography */
+  --font-sans: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --radius: 0.625rem;
+
+  /* Light theme - Royal African Travel brand palette */
+  --background: oklch(0.985 0.002 80);       /* Warm white #FAFAF8 */
+  --foreground: oklch(0.15 0.01 260);        /* Charcoal #1A1A1A */
+
+  --card: oklch(1 0 0);                      /* White */
+  --card-foreground: oklch(0.15 0.01 260);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0.01 260);
+
+  --primary: oklch(0.48 0.18 18);            /* Brand red #AF1C2C */
+  --primary-foreground: oklch(0.98 0 0);     /* White */
+
+  --secondary: oklch(0.30 0.06 260);         /* Navy #1A365D */
+  --secondary-foreground: oklch(0.98 0 0);
+
+  --muted: oklch(0.96 0.005 80);             /* Warm gray */
+  --muted-foreground: oklch(0.44 0.01 260);  /* Darker gray for WCAG AA contrast */
+
+  --accent: oklch(0.74 0.12 80);             /* Gold #D4A843 */
+  --accent-foreground: oklch(0.15 0.01 260);
+
+  --destructive: oklch(0.55 0.22 25);
+
+  --border: oklch(0.90 0.005 80);
+  --input: oklch(0.90 0.005 80);
+  --ring: oklch(0.48 0.18 18);               /* Brand red for focus rings */
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
