@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PromotionCard } from "@/components/promotion-card";
-import { getActivePromotions } from "@/content/promotions";
+import { getActivePromotions, type Promotion } from "@/content/promotions";
 import { Phone, Tag } from "lucide-react";
+import { sanityFetch } from "@/lib/sanity-fetch";
+import { promotionsQuery } from "@/lib/queries";
+import { urlFor } from "@/lib/sanity";
 
 export const metadata: Metadata = {
   title: "Specials & Promotions",
@@ -17,8 +20,35 @@ export const metadata: Metadata = {
   },
 };
 
-export default function SpecialsPage() {
-  const activePromotions = getActivePromotions();
+export default async function SpecialsPage() {
+  // Fetch from Sanity (auto-filters expired via GROQ), fall back to static
+  const sanityPromos = await sanityFetch<
+    {
+      _id: string;
+      destination: string;
+      from: string;
+      price: string;
+      priceNote: string;
+      validFrom: string;
+      validTo: string;
+      description: string;
+      image?: { asset: { _ref: string } };
+    }[]
+  >(promotionsQuery);
+
+  const activePromotions: Promotion[] = sanityPromos
+    ? sanityPromos.map((p) => ({
+        id: p._id,
+        destination: p.destination,
+        from: p.from,
+        price: p.price,
+        priceNote: p.priceNote,
+        validFrom: p.validFrom,
+        validTo: p.validTo,
+        description: p.description,
+        image: p.image ? urlFor(p.image).width(800).height(500).url() : undefined,
+      }))
+    : getActivePromotions();
 
   return (
     <>

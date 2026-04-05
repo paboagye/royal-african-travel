@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ServiceCard } from "@/components/service-card";
+import { sanityFetch } from "@/lib/sanity-fetch";
+import { airlinePartnersQuery } from "@/lib/queries";
 import {
   Plane,
   Package,
@@ -72,7 +74,17 @@ const airlinePartners = [
   { name: "Kenya Airways", color: "bg-[#C8102E]" },
 ];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const sanityAirlines = await sanityFetch<
+    { _id: string; name: string; color: string }[]
+  >(airlinePartnersQuery);
+
+  const resolvedAirlines = sanityAirlines
+    ? sanityAirlines.map((a) => ({
+        name: a.name,
+        color: `bg-[${a.color}]`,
+      }))
+    : airlinePartners;
   return (
     <>
       {/* Hero */}
@@ -118,7 +130,7 @@ export default function ServicesPage() {
             </p>
           </div>
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            {airlinePartners.map((airline) => (
+            {resolvedAirlines.map((airline) => (
               <div
                 key={airline.name}
                 className="flex h-20 items-center justify-center rounded-lg border bg-card px-4 shadow-sm"

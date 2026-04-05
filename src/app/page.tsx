@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { HeroCarousel } from "@/components/hero-carousel";
 import { DestinationCard } from "@/components/destination-card";
 import { Plane, ShieldCheck, Globe } from "lucide-react";
+import { sanityFetch } from "@/lib/sanity-fetch";
+import { destinationsQuery } from "@/lib/queries";
+import { urlFor } from "@/lib/sanity";
 
 export const metadata: Metadata = {
   title:
@@ -63,7 +66,20 @@ const valueProps = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  // Fetch destinations from Sanity, fall back to static data
+  const sanityDestinations = await sanityFetch<
+    { _id: string; name: string; description: string; image?: { asset: { _ref: string } } }[]
+  >(destinationsQuery);
+
+  const resolvedDestinations = sanityDestinations
+    ? sanityDestinations.map((d) => ({
+        name: d.name,
+        description: d.description,
+        image: d.image ? urlFor(d.image).width(800).height(500).url() : undefined,
+      }))
+    : destinations;
+
   return (
     <>
       {/* Hero Carousel */}
@@ -105,7 +121,7 @@ export default function Home() {
             </p>
           </div>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {destinations.map((dest) => (
+            {resolvedDestinations.map((dest) => (
               <DestinationCard key={dest.name} {...dest} />
             ))}
           </div>
